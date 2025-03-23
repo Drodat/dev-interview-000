@@ -1,8 +1,8 @@
 ## Getting Started
 
-This is a [Next.js](https://nextjs.org) project.
+This is a [Next.js](https://nextjs.org) v15 project. You may need to update your version of node js.
 
-To run it, install the pre-installed packages and run the development server:
+To run it, install the packages and run the development server:
 
 ```bash
 yarn install 
