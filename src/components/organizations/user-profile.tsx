@@ -91,24 +91,8 @@ export function UserProfile({ userId }: { userId: string }) {
                         className="border-white/[0.08]"
                     />
                 </div>
-                <div className="space-y-2">
-                    <Label className="text-white/60">Phone</Label>
-                    <Input
-                        disabled={!isEditing}
-                        value={userData.phone}
-                        onChange={(e) => setUserData({ ...userData, phone: e.target.value })}
-                        className="border-white/[0.08]"
-                    />
-                </div>
-                <div className="space-y-2">
-                    <Label className="text-white/60">Location</Label>
-                    <Input
-                        disabled={!isEditing}
-                        value={userData.location}
-                        onChange={(e) => setUserData({ ...userData, location: e.target.value })}
-                        className="border-white/[0.08]"
-                    />
-                </div>
+       
+            
                 <div className="space-y-2">
                     <Label className="text-white/60">Organization</Label>
                     <Input
@@ -117,15 +101,7 @@ export function UserProfile({ userId }: { userId: string }) {
                         className="border-white/[0.08]"
                     />
                 </div>
-                <div className="space-y-2">
-                    <Label className="text-white/60">Department</Label>
-                    <Input
-                        disabled={!isEditing}
-                        value={userData.department}
-                        onChange={(e) => setUserData({ ...userData, department: e.target.value })}
-                        className="border-white/[0.08]"
-                    />
-                </div>
+  
             </div>
         </div>
     );
