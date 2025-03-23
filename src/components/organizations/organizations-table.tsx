@@ -4,10 +4,26 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { getOrganizations } from '@/lib/data/organizations';
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { Organization } from "@/lib/data/organizations";
+import { getTotalUsersCount, getTotalOrganizationsCount } from "@/lib/firebase/stats";
 
 export function OrganizationsTable() {
-    const organizations = getOrganizations();
+    const [organizations, setOrganizations] = useState<Organization[]>([])
     const router = useRouter();
+    // const totalUsers = await getTotalUsersCount();
+    useEffect(() => {
+        async function fetchOrganizations() {
+            const orgs = await getOrganizations();            
+            setOrganizations(orgs);
+            const usersCount = await getTotalUsersCount();
+            const organizationsCount = await getTotalOrganizationsCount();
+            console.log("getTotalUsersCount()",usersCount)
+            console.log("getTotalOrganizationsCount()",organizationsCount)
+        }
+        fetchOrganizations()
+    },[])
+    
 
     return (
         <div>
