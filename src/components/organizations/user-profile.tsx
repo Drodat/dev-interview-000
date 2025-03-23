@@ -101,7 +101,6 @@ export function UserProfile({ userId }: { userId: string }) {
                         className="border-white/[0.08]"
                     />
                 </div>
-  
             </div>
         </div>
     );
