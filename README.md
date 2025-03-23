@@ -1,8 +1,8 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
 ## Getting Started
 
-First, install the pre-installed packages and run the development server:
+This is a [Next.js](https://nextjs.org) project.
+
+To run it, install the pre-installed packages and run the development server:
 
 ```bash
 yarn install 
@@ -44,6 +44,12 @@ Your tasks are listed below:
     d. The back button should go back to the correct organization page (currently goes back to main organization tab)
 
 ## Further Notes
+
+This project should take between 1-2 hours to implement:
+
+ - If you can not complete a step, you will not be penalized 
+ - You can use any external resources (docs / open source projects / chatGPT or other AI) 
+ - Please take notes on your thought process for each task. Include what resources you used, if any.
 
 To learn more about Next.js, take a look at the following resources:
 
