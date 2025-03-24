@@ -1,4 +1,4 @@
-import { collection, getDocs, query,getCountFromServer } from "firebase/firestore";
+import { collection, getDocs,getDoc,doc, query,getCountFromServer } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { firestoreTimestampADate } from "@/lib/utils";
 export interface Organization {
@@ -49,7 +49,6 @@ export async function getOrganizations(): Promise<Organization[]> {
                 const usersSnapshot = await getCountFromServer(usersRef);
                 return usersSnapshot.data().count;
             }
-            console.log("doc.data()",doc.data())
             const lastActive = firestoreTimestampADate(doc.data().createdAt);            
             organizations.push({
                 id: doc.id,
@@ -61,13 +60,33 @@ export async function getOrganizations(): Promise<Organization[]> {
                 reports: 0
             });
         });
-        console.log('Organizations:', organizations);
         return organizations;
     } catch (error) {
         console.error('Error getting organizations:', error);
         return [];
     }
 }
-export const getOrganizationById = (id: string) => organizations.find(org => org.id === id);
+export const getOrganizationById = async (organizationId: string) => {
+    try {
+        // const usersRef = collection(db, "organizations", id, "users");
+        // const usersSnapshot = await getCountFromServer(usersRef);
+        const docsnapshot = await getDocs(collection(db, "organizations", organizationId, "users"));
+        const users: User[] = []
+        if (docsnapshot && docsnapshot.docs) {
+            docsnapshot.docs.forEach((doc) => {
+              console.log("Document ID:", doc.id);
+              console.log("Document Data:", doc.data());
+              users.push(doc.data())
+            });
+        }else {
+            console.log(`Organization ${organizationId} has no users.`);
+            return 0;
+        }
+
+    } catch (error) {
+        console.error("Error getting document:", error);
+        return null;
+    }
+};
 export const getActiveOrganizations = () => organizations.filter(org => org.status === 'active');
 export const getInactiveOrganizations = () => organizations.filter(org => org.status === 'inactive'); 

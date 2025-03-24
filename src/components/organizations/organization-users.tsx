@@ -2,7 +2,8 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
+import { getUsers } from "@/lib/data/users";
 
 interface User {
     id: string;
@@ -12,46 +13,43 @@ interface User {
     createdAt: string;
 }
 
-export function OrganizationUsers({ organizationId }: { organizationId: string }) {
+export function OrganizationUsers() {
     const router = useRouter();
+    const params = useParams();
     const [users, setUsers] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [organizationId, setOrganizationId] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (params && params.id) {
+          setOrganizationId(typeof params.id === 'string' ? params.id : Array.isArray(params.id) ? params.id[0] : null);
+        }
+      }, [params]);
 
     useEffect(() => {
         const fetchUsers = async () => {
+            if (!organizationId) return;
+            
             setIsLoading(true);
             try {
-                // For now, using mock data
-                const mockUsers = [
-                    {
-                        id: "1",
-                        name: "John Doe",
-                        email: `john@org-${organizationId}.com`,
-                        role: "Admin",
-                        createdAt: "2024-01-20"
-                    },
-                    {
-                        id: "2",
-                        name: "Jane Smith",
-                        email: `jane@org-${organizationId}.com`,
-                        role: "User",
-                        createdAt: "2024-01-19"
-                    },
-                    {
-                        id: "3",
-                        name: "Bob Wilson",
-                        email: `bob@org-${organizationId}.com`,
-                        role: "User",
-                        createdAt: "2024-01-18"
-                    },
-                ];
-
-                // Simulate network delay
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                setUsers(mockUsers);
+                const userList = await getUsers(organizationId);
+                console.log("userList",userList)
+                
+                if (Array.isArray(userList)) {                    
+                    const formattedUsers = userList.map(user => ({
+                        id: user.id || '',
+                        name: user.name || '',
+                        email: user.email || '',
+                        role: user.role || '',
+                        createdAt: user.createdAt || '',
+                    }));
+                    setUsers(formattedUsers);
+                } else {
+                    setUsers([]);
+                }
             } catch (error) {
                 console.error('Error fetching users:', error);
-                // You might want to show an error message to the user
+                setUsers([]);
             } finally {
                 setIsLoading(false);
             }
@@ -104,4 +102,4 @@ export function OrganizationUsers({ organizationId }: { organizationId: string }
             </Table>
         </div>
     );
-} 
+}

@@ -1,3 +1,7 @@
+import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
+import { db } from "../firebase/config";
+import { firestoreTimestampADate } from "@/lib/utils";
+
 export interface User {
     id: string;
     name: string;
@@ -7,6 +11,16 @@ export interface User {
     status: 'active' | 'inactive';
     lastActive: string;
     avatarUrl: string;
+    createdAt?: string;
+}
+
+export type UserTable = {
+    id: string;
+    name: string;
+    email: string;
+    organization?: string;
+    role: string;
+    createdAt?: string;
 }
 
 export const users: User[] = [
@@ -42,7 +56,66 @@ export const users: User[] = [
     }
 ];
 
-export const getUsers = () => users;
-export const getUserById = (id: string) => users.find(user => user.id === id);
+export const getUsers = async(organizationId: string): Promise<UserTable[] | null> => {
+    try {
+        if (!organizationId) {
+            console.error("Organization ID is required");
+            return [];
+        }
+        
+        const usersCollection = collection(db, "organizations", organizationId, "users");
+        const docsnapshot = await getDocs(usersCollection);
+        
+        if (!docsnapshot.empty) {
+            const users: UserTable[] = docsnapshot.docs.map(doc => {
+                const data = doc.data();
+                console.log("data",data)
+                return {
+                    id: doc.id,
+                    name: data.name || '',
+                    email: data.email || '',
+                    role: data.role || '',
+                    organization: data.organization || '',
+                    createdAt: firestoreTimestampADate(data.createdAt)
+                };
+            });
+            
+            return users;
+        } else {
+            console.log(`Organization ${organizationId} has no users.`);
+            return [];
+        }
+    } catch (error) {
+        console.error("Error getting users:", error);
+        return null;
+    }
+};
+
+export const getUserById = async(userId: string, organizationId: string) => {
+    try {
+        if (!userId || !organizationId) {
+            console.error("User ID and Organization ID are required");
+            return null;
+        }
+        
+        const docRef = doc(db, "organizations", organizationId, "users", userId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            return { 
+                id: docSnap.id,
+                ...data
+            };
+        } else {
+            console.log("No such user document!");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error getting user document:", error);
+        return null;
+    }
+};
+
 export const getActiveUsers = () => users.filter(user => user.status === 'active');
-export const getInactiveUsers = () => users.filter(user => user.status === 'inactive'); 
+export const getInactiveUsers = () => users.filter(user => user.status === 'inactive');
