@@ -4,8 +4,16 @@ import { UserProfile } from "@/components/organizations/user-profile";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { getUserById } from "@/lib/data/users";
 
-export default function UserPage({ params }: { params: { id: string } }) {
+export default  function UserPage({ params }: { params: { id: string} }) {
+    const id = params.id
+    console.log('id', id)
+
+    // const getUser = async () => {
+    //     return await getUserById(id, organizationId);
+    // }
+    // console.log('user',getUser)
     return (
         <div className="space-y-10">
             <div className="space-y-2">

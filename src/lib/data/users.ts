@@ -103,6 +103,7 @@ export const getUserById = async(userId: string, organizationId: string) => {
 
         if (docSnap.exists()) {
             const data = docSnap.data();
+            console.log('data',data)
             return { 
                 id: docSnap.id,
                 ...data

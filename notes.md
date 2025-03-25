@@ -13,3 +13,13 @@ To request the data, I modified the `getOrganizations` function:
 **2 - Individual organization page**
 
 For the second part of the exercise, I used a similar function as `getOrganizations()` to get each user's data in the organization, but passing the `organizationId` as a parameter. In this part, I tried to use the organization ID from the `params`, but I had trouble using the `params`, so I decided to use `useParams` to get the parameters directly from the URL.
+
+**3 - Individual user page**
+
+To solve the third part I need to fetch the user data using the id. The function `getUserById()` needs two parameters: `userId` and `organizationId`. I get the `userId` from the params but I haved troubles getting the `organizationId` because that data was nos passed as param, I try to solve that passing through the url and getting in the comment using the searchParams but I couldn`t use that because the component is a server component. I also consider use a context.
+If I had the correctly the `organizationId` and getting the user data the next step would be edit the user info using the firestore function `updateDoc()`.
+
+**Resources that i used**
+- Claude : I consider that is better than ChatGPT or Gemini writing code
+- Firestore documentation
+- Get to know Cloud Firestore : This youtube playlist was too useful to understand how Firestore structure the collections and the docs

@@ -1,6 +1,8 @@
 import { collection, getDocs,getDoc,doc, query,getCountFromServer } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { firestoreTimestampADate } from "@/lib/utils";
+import { User } from './users';
+
 export interface Organization {
     id: string;
     name: string;
